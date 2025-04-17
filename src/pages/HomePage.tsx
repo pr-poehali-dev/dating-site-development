@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import NavBar from "@/components/layouts/NavBar";
 import UserCard from "@/components/profile/UserCard";
 
@@ -36,6 +38,7 @@ const MOCK_USERS = [
 
 const HomePage = () => {
   const [users, setUsers] = useState(MOCK_USERS);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   const handleLike = (id: string) => {
     console.log(`Лайк пользователю ${id}`);
@@ -57,24 +60,45 @@ const HomePage = () => {
       <div className="container mx-auto px-4 pt-20 pb-10">
         <h1 className="text-3xl font-bold text-center mb-8 text-rose-500">Найдите свою вторую половинку</h1>
         
-        {users.length > 0 ? (
-          <div className="max-w-md mx-auto">
-            <UserCard 
-              {...users[0]} 
-              onLike={handleLike} 
-              onDislike={handleDislike} 
-              onMessage={handleMessage} 
-            />
-          </div>
+        {isAuthenticated ? (
+          users.length > 0 ? (
+            <div className="max-w-md mx-auto">
+              <UserCard 
+                {...users[0]} 
+                onLike={handleLike} 
+                onDislike={handleDislike} 
+                onMessage={handleMessage} 
+              />
+            </div>
+          ) : (
+            <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow">
+              <h3 className="text-xl font-semibold mb-2">Пока анкет больше нет</h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Загляните позже, чтобы увидеть новых людей или измените настройки поиска
+              </p>
+              <button className="mt-4 px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-600">
+                Обновить
+              </button>
+            </div>
+          )
         ) : (
-          <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow">
-            <h3 className="text-xl font-semibold mb-2">Пока анкет больше нет</h3>
-            <p className="text-gray-500 dark:text-gray-400">
-              Загляните позже, чтобы увидеть новых людей или измените настройки поиска
+          <div className="text-center p-10 bg-white dark:bg-gray-800 rounded-lg shadow max-w-md mx-auto">
+            <h3 className="text-xl font-semibold mb-4">Начните поиск своей второй половинки</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              Присоединяйтесь к тысячам людей, которые уже нашли свою любовь на нашем сайте
             </p>
-            <button className="mt-4 px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-600">
-              Обновить
-            </button>
+            <div className="flex flex-col space-y-3">
+              <Link to="/register">
+                <Button className="w-full bg-rose-500 hover:bg-rose-600">
+                  Зарегистрироваться
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button variant="outline" className="w-full">
+                  Войти
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
       </div>
